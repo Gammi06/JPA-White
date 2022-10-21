@@ -1,5 +1,7 @@
 package site.metacoding.white3.domain;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -14,10 +16,24 @@ public class BoardRepository {
     private final EntityManager em;
 
     public void save(Board board) {
-        if (board.getId() == null) {
-            em.persist(board); // insert 쿼리가 자동으로 돌아감
-        } else {
-            em.merge(board); // update 쿼리가 자동으로 돌아감
-        }
+        em.persist(board); // insert 쿼리가 자동으로 돌아감
+    }
+
+    public Board findById(Long id) {
+        // 네이티브는 복잡한 거, 크리에이트는 간단한 거
+        // Board < 자바의 엔티티
+        Board boardPS = em.createQuery("select b from Board b where b.id = :id", Board.class)
+                .setParameter("id", id).getSingleResult();
+        // 맵핑, 리턴값
+        return findById(id);
+    }
+
+    public List<Board> findAll() {
+        List<Board> boardsPS = em.createQuery("select b from Board b", Board.class).getResultList();
+        return boardsPS;
+    }
+
+    public void deleteById(Long id) {
+        em.createQuery("delete from Board b where b.id = :id").setParameter("id", id).executeUpdate();
     }
 }
