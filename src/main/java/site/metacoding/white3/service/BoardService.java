@@ -1,8 +1,10 @@
 package site.metacoding.white3.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import site.metacoding.white3.domain.Board;
 import site.metacoding.white3.domain.BoardRepository;
 
 @RequiredArgsConstructor // 이거없으면 디폴트 생성자
@@ -11,7 +13,8 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public void save() {
-        boardRepository.save(null);
+    @Transactional
+    public void save(Board board) {
+        boardRepository.save(board);
     }
 }

@@ -19,4 +19,5 @@ public class Board {
     private String title;
     @Column(length = 1000) // 데이터의 크기가 1000자인 열
     private String content;
+    private String author;
 }
