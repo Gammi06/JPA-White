@@ -2,6 +2,8 @@ package site.metacoding.white3.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,14 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white3.domain.Board;
+import site.metacoding.white3.domain.User;
+import site.metacoding.white3.dto.BoardReqDto.BoardSaveDto;
 import site.metacoding.white3.service.BoardService;
 
 @RestController
 @RequiredArgsConstructor
 public class BoardApiController {
+
+    private final HttpSession session;
     private final BoardService boardService;
     // repository와 service를 함께 사용하면 일관성이 없기 때문에
     // service로만 트랜젝션을 관리하는 것이 좋다
+
+    @PostMapping("/v2/board")
+    public String saveV2(@RequestBody BoardSaveDto boardSaveDto) {
+        User principal = (User) session.getAttribute("principal");
+        boardSaveDto.setUser(principal);
+        boardService.save(boardSaveDto);
+        return "ok";
+    }
 
     @GetMapping("/board/{id}")
     public Board findById(@PathVariable Long id) {
@@ -32,11 +46,11 @@ public class BoardApiController {
     }
 
     // JSON으로 받을거니까 request body를 붙인다
-    @PostMapping("/board")
-    public String save(@RequestBody Board board) {
-        boardService.save(board);
-        return "ok";
-    }
+    // @PostMapping("/board")
+    // public String save(@RequestBody Board board) {
+    // boardService.save(board);
+    // return "ok";
+    // }
 
     @PutMapping("/board/{id}")
     public String update(@PathVariable Long id, @RequestBody Board board) {

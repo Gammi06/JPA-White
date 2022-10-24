@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white3.domain.Board;
 import site.metacoding.white3.domain.BoardRepository;
+import site.metacoding.white3.dto.BoardReqDto.BoardSaveDto;
 
 @RequiredArgsConstructor // 이거없으면 디폴트 생성자
 @Service // 안붙이면 IoC에 안뜸
@@ -16,7 +17,12 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public void save(Board board) {
+    public void save(BoardSaveDto boardSaveDto) {
+        // 엔티티로 변환하기
+        Board board = new Board();
+        board.setTitle(boardSaveDto.getTitle());
+        board.setContent(boardSaveDto.getContent());
+        board.setUser(boardSaveDto.getUser());
         boardRepository.save(board);
     }
 
@@ -41,7 +47,6 @@ public class BoardService {
         // 영속화된 데이터를 수정함
         boardPS.setTitle(board.getTitle());
         boardPS.setContent(board.getContent());
-        boardPS.setAuthor(board.getAuthor());
         // 트렌젝션이 종료 시 더티체킹을 함 + flush
     }
 
