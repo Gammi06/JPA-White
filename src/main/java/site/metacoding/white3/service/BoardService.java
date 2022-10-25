@@ -8,11 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white3.domain.Board;
 import site.metacoding.white3.domain.BoardRepository;
-import site.metacoding.white3.domain.User;
-import site.metacoding.white3.domain.UserRepository;
 import site.metacoding.white3.dto.BoardReqDto.BoardSaveReqDto;
 import site.metacoding.white3.dto.BoardRespDto.BoardSaveRespDto;
-import site.metacoding.white3.dto.BoardRespDto.BoardSaveRespDto.UserDto;
 
 @RequiredArgsConstructor // 이거없으면 디폴트 생성자
 @Service // 안붙이면 IoC에 안뜸
