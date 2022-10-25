@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.white3.domain.User;
+import site.metacoding.white3.dto.ResponseDto;
+import site.metacoding.white3.dto.SessionUser;
+import site.metacoding.white3.dto.UserReqDto.JoinReqDto;
+import site.metacoding.white3.dto.UserReqDto.LoginReqDto;
+import site.metacoding.white3.dto.UserRespDto.JoinRespDto;
 import site.metacoding.white3.service.UserService;
 
 @RestController
@@ -21,15 +25,15 @@ public class UserApiController {
 
     // JSON으로 받을거니까 request body를 붙인다
     @PostMapping("/join")
-    public String save(@RequestBody User user) {
-        userService.save(user);
-        return "ok";
+    public ResponseDto<?> save(@RequestBody JoinReqDto joinReqDto) {
+        JoinRespDto joinRespDto = userService.save(joinReqDto);
+        return new ResponseDto<>(1, "ok", joinRespDto);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        User principal = userService.login(user);
+    public ResponseDto<?> login(@RequestBody LoginReqDto loginReqDto) {
+        SessionUser principal = userService.login(loginReqDto);
         session.setAttribute("principal", principal);
-        return "login";
+        return new ResponseDto<>(1, "ok", principal);
     }
 }

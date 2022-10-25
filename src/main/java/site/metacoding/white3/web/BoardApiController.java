@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white3.domain.Board;
-import site.metacoding.white3.domain.User;
-import site.metacoding.white3.dto.BoardReqDto.BoardSaveDto;
+import site.metacoding.white3.dto.BoardReqDto.BoardSaveReqDto;
+import site.metacoding.white3.dto.ResponseDto;
+import site.metacoding.white3.dto.SessionUser;
 import site.metacoding.white3.service.BoardService;
 
 @RestController
@@ -27,12 +28,12 @@ public class BoardApiController {
     // repository와 service를 함께 사용하면 일관성이 없기 때문에
     // service로만 트랜젝션을 관리하는 것이 좋다
 
-    @PostMapping("/v2/board")
-    public String saveV2(@RequestBody BoardSaveDto boardSaveDto) {
-        User principal = (User) session.getAttribute("principal");
-        boardSaveDto.setUser(principal);
-        boardService.save(boardSaveDto);
-        return "ok";
+    @PostMapping("/board")
+    public ResponseDto<?> save(@RequestBody BoardSaveReqDto boardSaveReqDto) {
+        SessionUser principal = (SessionUser) session.getAttribute("principal");
+        boardSaveReqDto.setSessionUser(principal);
+        boardService.save(boardSaveReqDto); // 서비스에 '단 하나의 객체'만 전달한다 (, 사용 X)
+        return new ResponseDto<>(1, "성공", boardSaveReqDto);
     }
 
     @GetMapping("/board/{id}")
@@ -44,13 +45,6 @@ public class BoardApiController {
     public List<Board> findAll() {
         return boardService.finAll();
     }
-
-    // JSON으로 받을거니까 request body를 붙인다
-    // @PostMapping("/board")
-    // public String save(@RequestBody Board board) {
-    // boardService.save(board);
-    // return "ok";
-    // }
 
     @PutMapping("/board/{id}")
     public String update(@PathVariable Long id, @RequestBody Board board) {
