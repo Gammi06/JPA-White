@@ -36,10 +36,10 @@ public class BoardApiController {
         return new ResponseDto<>(1, "성공", boardSaveReqDto);
     }
 
-    @GetMapping("/board/{id}")
-    public Board findById(@PathVariable Long id) {
-        return boardService.findById(id);
-    }
+    // @GetMapping("/board/{id}")
+    // public ResponseDto<?> findById(@PathVariable Long id) {
+    // return boardService.findById(id);
+    // }
 
     @GetMapping("/board")
     public List<Board> findAll() {
