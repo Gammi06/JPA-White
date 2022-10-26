@@ -1,6 +1,7 @@
 package site.metacoding.white3.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -20,13 +21,20 @@ public class BoardRepository {
         return board;
     }
 
-    public Board findById(Long id) {
-        // 네이티브는 복잡한 거, 크리에이트는 간단한 거
-        // Board < 자바의 엔티티
-        Board boardPS = em.createQuery("select b from Board b where b.id = :id", Board.class)
-                .setParameter("id", id).getSingleResult();
-        // 맵핑, 리턴값
-        return findById(id);
+    public Optional<Board> findById(Long id) {
+        // 팩토리 패턴
+        // Optional : null을 받을 수 있는 타입
+        // of Nullable : Optional이라는 박스 안에 값을 담기 때문에 무조건 null체크를 해야 함
+        // 제어권이 없어서 tryCatch하기
+        try {
+            Optional<Board> boardOP = Optional.of(em
+                    .createQuery("select b from Board b where b.id = :id", Board.class)
+                    .setParameter("id", id)
+                    .getSingleResult());
+            return boardOP;
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     public List<Board> findAll() {
@@ -35,6 +43,8 @@ public class BoardRepository {
     }
 
     public void deleteById(Long id) {
-        em.createQuery("delete from Board b where b.id = :id").setParameter("id", id).executeUpdate();
+        em.createQuery("delete from Board b where b.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white3.domain.Board;
 import site.metacoding.white3.dto.BoardReqDto.BoardSaveReqDto;
+import site.metacoding.white3.dto.BoardReqDto.BoardUpdateReqDto;
+import site.metacoding.white3.dto.BoardRespDto.BoardDetailRespDto;
+import site.metacoding.white3.dto.BoardRespDto.BoardWriteRespDto;
 import site.metacoding.white3.dto.ResponseDto;
 import site.metacoding.white3.dto.SessionUser;
 import site.metacoding.white3.service.BoardService;
@@ -36,20 +39,20 @@ public class BoardApiController {
         return new ResponseDto<>(1, "성공", boardSaveReqDto);
     }
 
-    // @GetMapping("/board/{id}")
-    // public ResponseDto<?> findById(@PathVariable Long id) {
-    // return boardService.findById(id);
-    // }
+    @GetMapping("/board/{id}")
+    public ResponseDto<?> findById(@PathVariable Long id) {
+        return new ResponseDto<>(1, "성공", boardService.findById(id));
+    }
 
     @GetMapping("/board")
-    public List<Board> findAll() {
-        return boardService.finAll();
+    public ResponseDto<?> findAll() {
+        return new ResponseDto<>(1, "성공", boardService.finAll());
     }
 
     @PutMapping("/board/{id}")
-    public String update(@PathVariable Long id, @RequestBody Board board) {
-        boardService.update(id, board);
-        return "ok";
+    public ResponseDto<?> update(@PathVariable Long id, @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
+        boardUpdateReqDto.setId(id);
+        return new ResponseDto<>(1, "성공", boardService.update(boardUpdateReqDto));
     }
 
     @DeleteMapping("/board/{id}")
