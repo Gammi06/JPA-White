@@ -31,4 +31,18 @@ public class UserReqDto {
         private String username;
         private String password;
     }
+
+    @Setter
+    @Getter
+    public static class UpdateReqDto {
+        // 인증 관련 로직(로그인 전 로직)들은 전부 Entity를 붙이지 말것
+        // post할때 /user => /join
+        private String username;
+        private String password;
+
+        // Dto를 User로 바꿔서 리턴해주는 코드
+        public User toEntity() {
+            return User.builder().username(username).password(password).build();
+        }
+    }
 }

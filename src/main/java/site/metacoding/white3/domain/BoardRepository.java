@@ -28,7 +28,8 @@ public class BoardRepository {
         // 제어권이 없어서 tryCatch하기
         try {
             Optional<Board> boardOP = Optional.of(em
-                    .createQuery("select b from Board b where b.id = :id", Board.class)
+                    .createQuery("select b from Board b join fetch b.user u join fetch b.comments c where b.id = :id",
+                            Board.class)
                     .setParameter("id", id)
                     .getSingleResult());
             return boardOP;

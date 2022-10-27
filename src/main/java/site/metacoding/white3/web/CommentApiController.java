@@ -2,15 +2,16 @@ package site.metacoding.white3.web;
 
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.query.criteria.internal.expression.ConcatExpression;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import site.metacoding.white3.dto.CommentReqDto.CommentSaveReqDto;
 import site.metacoding.white3.dto.ResponseDto;
 import site.metacoding.white3.dto.SessionUser;
-import site.metacoding.white3.dto.CommentReqDto.CommentSaveReqDto;
 import site.metacoding.white3.service.CommentService;
 
 @RequiredArgsConstructor
@@ -25,5 +26,11 @@ public class CommentApiController {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         commentSaveReqDto.setSessionUser(sessionUser);
         return new ResponseDto<>(1, "성공", commentService.save(commentSaveReqDto));
+    }
+
+    @DeleteMapping("/comment/{id}")
+    public ResponseDto<?> deleteById(@PathVariable Long id) {
+        commentService.deleteById(id);
+        return new ResponseDto<>(1, "성공", null);
     }
 }

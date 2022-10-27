@@ -38,18 +38,10 @@ public class BoardService {
     @Transactional(readOnly = true) // 트랜잭션을 걸면 OSIV가 false여도 디비 커넥션이 유지됨.
     public BoardDetailRespDto findById(Long id) {
         Optional<Board> boardOP = boardRepository.findById(id);
-        System.out.println("ccc: here 1");
         if (boardOP.isEmpty() || !boardOP.isPresent()) {
-            System.out.println("CCC: 해당 id를 찾을 수 없습니다.");
             throw new RuntimeException("해당 id를 찾을 수 없습니다.");
         }
-        System.out.println("ccc: here 2");
-
         BoardDetailRespDto boardDetailRespDto = new BoardDetailRespDto(boardOP.get());
-
-        System.out.println("ccc: here 3");
-        System.out.println("ccc: boardDetailRespDto-id = " + boardDetailRespDto.getId());
-        System.out.println("ccc: here 4");
         return boardDetailRespDto;
     }
 

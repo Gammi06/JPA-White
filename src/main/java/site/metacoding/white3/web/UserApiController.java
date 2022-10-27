@@ -3,6 +3,7 @@ package site.metacoding.white3.web;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,7 @@ import site.metacoding.white3.dto.ResponseDto;
 import site.metacoding.white3.dto.SessionUser;
 import site.metacoding.white3.dto.UserReqDto.JoinReqDto;
 import site.metacoding.white3.dto.UserReqDto.LoginReqDto;
+import site.metacoding.white3.dto.UserReqDto.UpdateReqDto;
 import site.metacoding.white3.dto.UserRespDto.JoinRespDto;
 import site.metacoding.white3.service.UserService;
 
@@ -35,5 +37,11 @@ public class UserApiController {
         SessionUser principal = userService.login(loginReqDto);
         session.setAttribute("principal", principal);
         return new ResponseDto<>(1, "ok", principal);
+    }
+
+    @PutMapping("/user")
+    public void update(@RequestBody UpdateReqDto updateReqDto) {
+        SessionUser principal = (SessionUser) session.getAttribute("principal");
+        userService.update(updateReqDto);
     }
 }

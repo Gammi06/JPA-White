@@ -33,7 +33,19 @@ public class CommentService {
             CommentSaveRespDto commentSaveRespDto = new CommentSaveRespDto(commentPS);
             return commentSaveRespDto;
         } else {
-            throw new RuntimeException("게시글이 없습니다.");
+            throw new RuntimeException("ccc: 게시글이 없습니다.");
+        }
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        // 1. comment가 있는지 확인
+        Optional<Comment> commentOP = commentRepository.findById(id);
+        if (commentOP.isPresent()) {
+            // 2. comment 삭제
+            commentRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("ccc: 해당 코멘트(" + id + ")를 삭제할 수 없습니다.");
         }
     }
 }

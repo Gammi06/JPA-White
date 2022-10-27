@@ -1,9 +1,8 @@
 package site.metacoding.white3.web;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.white3.domain.Board;
 import site.metacoding.white3.dto.BoardReqDto.BoardSaveReqDto;
 import site.metacoding.white3.dto.BoardReqDto.BoardUpdateReqDto;
-import site.metacoding.white3.dto.BoardRespDto.BoardDetailRespDto;
-import site.metacoding.white3.dto.BoardRespDto.BoardWriteRespDto;
 import site.metacoding.white3.dto.ResponseDto;
 import site.metacoding.white3.dto.SessionUser;
 import site.metacoding.white3.service.BoardService;
@@ -31,6 +27,9 @@ public class BoardApiController {
     // repository와 service를 함께 사용하면 일관성이 없기 때문에
     // service로만 트랜젝션을 관리하는 것이 좋다
 
+    // 자바 스크립트는 스프링한테 ajax요청을 하지 못함 (domain이 달라서)
+    // crossorigin을 붙이면 정책이 무효화됨 <= 자바스크립트도 요청이 가능해짐
+    @CrossOrigin
     @PostMapping("/board")
     public ResponseDto<?> save(@RequestBody BoardSaveReqDto boardSaveReqDto) {
         SessionUser principal = (SessionUser) session.getAttribute("principal");
